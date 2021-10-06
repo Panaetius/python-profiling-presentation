@@ -1,0 +1,402 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Presentation Title</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+
+		<link rel="stylesheet" type="text/css" href="plugin/asciinema/asciinema-player.css" />
+
+		<style type="text/css">
+		    section.title-slide {
+				position: absolute !important;
+				top: 50% !important;
+				margin:0 !important;
+			}
+		    html.print-pdf .reveal .slides .pdf-page section.title-slide {
+				position: absolute !important;
+				top: 50% !important;
+				left:30% !important;
+				margin:0 !important;
+			}
+			.title-slide h2, .title-slide h3 {
+				color: white;
+			}
+
+			section.content-slide {
+				margin: 0;
+			}
+
+			section.content-slide h3:first-child {
+				color: white;
+				margin-top: 20px;
+				margin-bottom: 50px;
+			}
+
+			.reveal .slides section[data-vertical-align-top]{
+				top: 0 !important;
+				left: 0 !important;
+			}
+
+			.reveal .slides, html.print-pdf .reveal .slides .pdf-page section {
+				text-align: left !important;
+				margin-left: 250px !important;
+			}
+
+			.asciicast .asciinema-player-wrapper {
+				text-align:left;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides slides-pdf">
+				<section data-markdown data-separator="---" data-separator-vertical="--" data-background-image="dist/images/title_background.svg" class="title-slide">
+					<textarea data-template>
+					  ## Profiling Python Code
+
+
+					  ### Improve performance for great good!
+					  <br/>
+					  <br/>
+
+					  <img style="position:absolute;top:-20%;left:57%;" src="dist/images/profiling.jpg" />
+					</textarea>
+				</section>
+				<section data-markdown data-separator="---" data-separator-vertical="--" data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<textarea data-template>
+					  ### What is profiling?
+
+					  Measure execution time and resource usage of programs to identify bottlenecks
+
+					  Types of profiling:
+					  * Line based
+					  * Function based
+
+					  Resources:
+					  * CPU Time
+					  * RAM Use
+					  * GPU Time
+					  * (I/O time)
+
+					  <img style="position:absolute;top:70%;left:15%;width:1300px;" src="dist/images/profiler-comparison.png" />
+
+					  --
+
+					  ### Line vs Function based
+
+					  Function Based:
+
+					  <img src="dist/images/function_based.png" />
+
+					  Line Based:
+
+					  <img width="750px" src="dist/images/line_based.png" />
+
+					</textarea>
+				  </section>
+				  <section data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<section>
+						<h3>Scalene - Simple Example</h3>
+
+						<div class="asciicast">
+							<!--
+							{
+							"URL": "dist/asciinema/simple.json",
+							"poster": "npt:0:09"
+							}
+							-->
+						</div>
+					</section>
+					<section>
+						<h3>Different outputs</h3>
+
+						<b>scalene --html --outfile profile.html</b><br/>
+						<img src="dist/images/html_output.png" width="1000px"/>
+
+					</section>
+					<section>
+						<h3>Scalene - Native Code Example</h3>
+						<p class="fragment fade-out" data-fragment-index="0">
+							<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example2.html" style="position:absolute;top:100%;left:0%;width:1400px;height:800px;max-height:none;" ></iframe>
+						</p>
+						<p class="fragment fade-in" data-fragment-index="0">
+							<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example2_better.html" style="position:absolute;top:100%;left:0%;width:1400px;height:800px;max-height:none;"></iframe>
+						</p>
+					</section>
+					<section>
+						<h3>Scalene - GPU Code Example</h3>
+						<p class="fragment fade-out" data-fragment-index="0">
+							<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example2.html" style="position:absolute;top:100%;left:0%;width:1400px;height:800px;max-height:none;" ></iframe>
+						</p>
+						<p class="fragment fade-in" data-fragment-index="0">
+							<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example2_better.html" style="position:absolute;top:100%;left:0%;width:1400px;height:800px;max-height:none;"></iframe>
+						</p>
+					</section>
+				</section>
+				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<section>
+						<h3>Bringing out the big guns - cProfile</h3>
+
+						<b>$ python -m cProfile [-m module | file]</b><br/><br/>
+						<pre style="height:600px;width:1500px;margin:0px;"><code data-trim data-noescape><script type="text/template">
+							$ python -m cProfile -s cumulative -m renku.cli --version | more
+							0.16.1
+									6786351 function calls (6157157 primitive calls) in 2.753 seconds
+
+							Ordered by: cumulative time
+
+							ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+								21    0.000    0.000    6.535    0.311 __init__.py:18(<module>)
+							1370/1    0.008    0.000    2.756    2.756 {built-in method builtins.exec}
+									1    0.000    0.000    2.756    2.756 <string>:1(<module>)
+									1    0.000    0.000    2.756    2.756 runpy.py:195(run_module)
+								2/1    0.000    0.000    2.755    2.755 runpy.py:102(_get_module_details)
+							199/4    0.000    0.000    2.747    0.687 {built-in method builtins.__import__}
+							1363/2    0.005    0.000    2.747    1.374 <frozen importlib._bootstrap>:978(_find_and_load)
+							1361/2    0.004    0.000    2.747    1.374 <frozen importlib._bootstrap>:948(_find_and_load_unlocked)
+							1313/2    0.004    0.000    2.747    1.374 <frozen importlib._bootstrap>:663(_load_unlocked)
+							1228/2    0.002    0.000    2.747    1.374 <frozen importlib._bootstrap_external>:722(exec_module)
+							1552/2    0.001    0.000    2.747    1.373 <frozen importlib._bootstrap>:211(_call_with_frames_removed)
+									1    0.000    0.000    2.288    2.288 client.py:18(<module>)
+							</script></code></pre>
+					</section>
+					<section>
+						<h3>Actually working with cProfile</h3>
+						<b>$ python -m cProfile -o outfile [-m module | file]</b><br/>
+						<b>$ snakeviz outfile</b><br/><br/>
+						<p class="fragment fade-out" data-fragment-index="0">
+							<img width="1000px" src="dist/images/snakeviz1.png" />
+						</p>
+						<p class="fragment fade-in" data-fragment-index="0">
+							<img style="position:absolute;top:32.3%;left:0%;width:1000px;" src="dist/images/snakeviz2.png" />
+						</p>
+					</section>
+					<section>
+						<h3>Too Many Imports!</h3>
+						<b>$ python -X importttimemyscript.py</b><br/><br/>
+
+						<pre style="height:600px;width:1500px;margin:0px;"><code data-trim data-noescape><script type="text/template">
+							import time: self [us] | cumulative | imported package
+							import time:       152 |        152 | zipimport
+							import time:       969 |        969 | _frozen_importlib_external
+							import time:       117 |        117 |     _codecs
+							import time:       851 |        967 |   codecs
+							import time:       717 |        717 |   encodings.aliases
+							[...]
+							import time:       198 |        198 |               cwlgen.workflowdeps
+							import time:       159 |        357 |             cwlgen.workflow
+							import time:       208 |       9497 |           cwlgen
+							import time:       323 |       9888 |         renku.core.management.workflow.converters.cwl
+							import time:       104 |       9992 |       renku.core.plugins.implementations
+							import time:       153 |        153 |       renku.core.plugins.run
+							import time:       137 |      10280 |     renku.core.plugins.pluginmanager
+							import time:     27119 |     101357 |   renku.cli.workflow
+							import time:       161 |        161 |       lockfile.linklockfile
+							import time:       314 |        474 |     lockfile
+							import time:       536 |       1010 |   renku.core.commands.version
+							import time:       731 |     347862 | renku.cli
+						</script></code></pre>
+					</section>
+				</section>
+				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<section>
+						<h3>Honorary Mentions - time</h3>
+						<b>time</b>
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="shell">
+							$ time python myfile.py
+							[...]
+
+							real    0m2.173s
+							user    0m2.025s
+							sys     0m0.143s
+						</code></pre>
+					</section>
+					<section>
+						<h3>Honorary Mentions - py-spy</h3>
+
+						Runtime profiling!
+
+						<pre style="height:600px;width:1400px;margin:0px;"><code data-trim data-noescape class="shell">
+							$ python -m myserver &
+							$ sudo su # needs root unfortunately
+							$ ps aux |grep python
+							user     817920 21.5  0.0  14948  9924 pts/2    R+   18:13   0:14 /usr/bin/python -m myserver
+							$ py-spy record --pid 817920
+							py-spy> Sampling process 100 times a second. Press Control-C to exit.
+							^C
+							py-spy> Stopped sampling because Control-C pressed
+							py-spy> Wrote flamegraph data to '817920-2021-10-06T18:20:03+02:00.svg'. Samples: 619 Errors: 0
+						</code></pre>
+						<img src="dist/images/pyspy.png" />
+					</section>
+				</section>
+				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<section>
+						<br/><br/><br/><br/>
+						<h2 class="r-fit-text" style="width:1500px;">What can we do about it?</h2>
+					</section>
+					<section>
+						<h3>Memoization</h3>
+
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+
+
+							def fib(n):
+								if n < 2:
+									return n
+								return fib(n-1) + fib(n-2)
+
+							fib(50)
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Memoization</h3>
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+							from functools import lru_cache
+
+							@lru_cache(maxsize = 128)
+							def fib_with_cache(n):
+								if n < 2:
+									return n
+								return fib_with_cache(n-1) + fib_with_cache(n-2)
+
+							fib_with_cache(50)
+						</code></pre>
+					</section>
+					<section>
+						<h3>Lazy Imports</h3>
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+							import my_huge_library
+
+							def do_something():
+								my_huge_library.calculate()
+
+							def do_something_else():
+								dont.use.huge.library()
+						</code></pre><br/>
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+
+
+							def do_something():
+								import my_huge_library
+
+								my_huge_library.calculate()
+
+							def do_something_else():
+								dont.use.huge.library()
+						</code></pre>
+					</section>
+					<section>
+						<h3>Learn itertools</h3>
+						<p>
+							<b>itertools</b> module has many built-in function for common tasks that are fast
+						</p>
+						<ul>
+							<li><b>chain</b> Concatenate lists/iterators without having to actually concatenate them</li>
+							<li><b>product</b> Get the cartesian product of two or more lists/iterators</li>
+							<li><b>permutations</b> Get all possible orderings of a list of elements</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Try PyPy</h3>
+						<ul>
+							<li>Implements Python 3.7.10</li>
+							<li>Behaves like regular Python</li>
+							<li>Is way faster</li>
+							<li>Might use less memory</li>
+							<li>Should work with most Python code</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Try C!</h3>
+						It's not that difficult to extend python with C code<br/><br/>
+
+						<pre style="height:500px;width:1000px;margin:0px;"><code data-trim data-noescape class="c"><script type="text/template">
+							#include <Python.h>
+
+							static PyObject *method_fputs(PyObject *self, PyObject *args) {
+								char *str, *filename = NULL;
+								int bytes_copied = -1;
+
+								/* Parse arguments */
+								if(!PyArg_ParseTuple(args, "ss", &str, &filename)) {
+									return NULL;
+								}
+
+								FILE *fp = fopen(filename, "w");
+								bytes_copied = fputs(str, fp);
+								fclose(fp);
+
+								return PyLong_FromLong(bytes_copied);
+							}
+						</script></code></pre>
+
+					</section>
+					<section>
+						<h3>Always compare</h3>
+						<ul>
+							<li>Keep metrics from before and after a change</li>
+							<li>Make sure you actually improved something</li>
+						</ul>
+					</section>
+				</section>
+				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<h3>Questions?</h3>
+					<img src="dist/images/questions.webp"/>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="bower_components/reveal.js-menu/menu.js"></script>
+		<script src="plugin/anything/plugin.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				progress: true,
+				slideNumber: "h.v",
+				center: false,
+				width: 1920,
+				height: 1080,
+				minScale: 0.2,
+				maxScale: 4.0,
+				margin: 0,
+				transition: "slide",
+				backgroundTransition: "slide",
+				menu: {
+					themes: true
+				},
+				anything: [
+                  {
+					  className: "asciicast",
+                      defaults: { theme: 'monokai', fontSize: '15px', preload: true },
+                      initialize: (function(container, options) {
+                       	asciinema.player.js.CreatePlayer(container, options.URL, options);
+                      })
+                   },
+				],
+				dependencies: [
+                  { src: 'plugin/asciinema/asciinema-player.js' },
+				],
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu, RevealAnything]
+			});
+		</script>
+	</body>
+</html>

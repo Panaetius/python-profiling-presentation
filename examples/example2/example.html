@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<head>
+<meta charset="UTF-8">
+<style>
+.r1 {color: #005f00; text-decoration-color: #005f00}
+.r2 {font-weight: bold}
+.r3 {color: #7f7f7f; text-decoration-color: #7f7f7f; font-weight: bold}
+.r4 {color: #000080; text-decoration-color: #000080; font-weight: bold}
+.r5 {color: #005f00; text-decoration-color: #005f00; font-weight: bold}
+.r6 {color: #87af00; text-decoration-color: #87af00; font-weight: bold}
+.r7 {color: #000080; text-decoration-color: #000080; font-weight: bold; font-style: italic}
+.r8 {color: #005f00; text-decoration-color: #005f00; font-weight: bold; font-style: italic}
+.r9 {color: #87af00; text-decoration-color: #87af00; font-weight: bold; font-style: italic}
+.r10 {color: #7f7f7f; text-decoration-color: #7f7f7f}
+.r11 {color: #800000; text-decoration-color: #800000; font-weight: bold}
+.r12 {color: #000080; text-decoration-color: #000080}
+.r13 {color: #87af00; text-decoration-color: #87af00}
+.r14 {color: #008000; text-decoration-color: #008000; background-color: #f8f8f8; font-weight: bold}
+.r15 {color: #000000; text-decoration-color: #000000; background-color: #f8f8f8}
+.r16 {color: #0000ff; text-decoration-color: #0000ff; background-color: #f8f8f8; font-weight: bold}
+.r17 {background-color: #f8f8f8}
+.r18 {color: #0000ff; text-decoration-color: #0000ff; background-color: #f8f8f8}
+.r19 {color: #666666; text-decoration-color: #666666; background-color: #f8f8f8}
+.r20 {color: #008000; text-decoration-color: #008000; background-color: #f8f8f8}
+.r21 {font-weight: bold; font-style: italic}
+.r22 {color: #0000ff; text-decoration-color: #0000ff}
+body {
+    color: #000000;
+    background-color: #ffffff;
+}
+</style>
+</head>
+<html>
+<body>
+    <code>
+        <pre style="font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">                            Memory usage: <span class="r1">▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▃▆█▆▃</span> (max:   2.29GB, growth rate:   0%)                            
+                                          example.py: % of time =  83.48% out of   3.36s.                                          
+       ╷       ╷       ╷       ╷        ╷       ╷               ╷       ╷                                                          
+ <span class="r2"> </span><span class="r3">Line</span><span class="r2"> </span>│<span class="r4">Time</span><span class="r2">   </span>│<span class="r4">––––––</span><span class="r2"> </span>│<span class="r4">––––––</span><span class="r2"> </span>│<span class="r5">Memory</span><span class="r2">  </span>│<span class="r5">––––––</span><span class="r2"> </span>│<span class="r5">–––––––––––</span><span class="r2">    </span>│<span class="r6">Copy</span><span class="r2">   </span>│<span class="r2">                                                         </span> 
+       │<span class="r7">Python</span><span class="r2"> </span>│<span class="r7">native</span><span class="r2"> </span>│<span class="r7">system</span><span class="r2"> </span>│<span class="r8">Python</span><span class="r2">  </span>│<span class="r8">avg</span><span class="r2">    </span>│<span class="r8">timeline</span><span class="r5">/%</span><span class="r2">     </span>│<span class="r9">(MB/s)</span><span class="r2"> </span>│<span class="r2">example.py                                               </span> 
+╺━━━━━━┿━━━━━━━┿━━━━━━━┿━━━━━━━┿━━━━━━━━┿━━━━━━━┿━━━━━━━━━━━━━━━┿━━━━━━━┿━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸
+ <span class="r10">    1 </span>│<span class="r11">   15%</span><span class="r12"> </span>│<span class="r11">   18%</span><span class="r12"> </span>│<span class="r12">   6%  </span>│<span class="r1">        </span>│<span class="r1">    8M </span>│<span class="r11">▁▁▁▁▁▁▁▁▁</span><span class="r1">      </span>│<span class="r13">       </span>│<span class="r14">import</span><span class="r15"> </span><span class="r16">numpy</span><span class="r15"> </span><span class="r14">as</span><span class="r15"> </span><span class="r16">np</span><span class="r17">                                      </span>  
+ <span class="r10">    2 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r17">                                                        </span>  
+ <span class="r10">    3 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r17">                                                        </span>  
+ <span class="r10">    4 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r14">def</span><span class="r15"> </span><span class="r18">main</span><span class="r15">():</span><span class="r17">                                             </span>  
+ <span class="r10">    5 </span>│<span class="r12">       </span>│<span class="r12">    3% </span>│<span class="r12">   2%  </span>│<span class="r1">        </span>│<span class="r1">  162M </span>│<span class="r1">▁▁▁▁▁▁▁▁▁   7% </span>│<span class="r13">       </span>│<span class="r15">    x </span><span class="r19">=</span><span class="r15"> np</span><span class="r19">.</span><span class="r15">array(</span><span class="r20">range</span><span class="r15">(</span><span class="r19">10**7</span><span class="r15">))</span><span class="r17">                          </span>  
+ <span class="r10">    6 </span>│<span class="r12">       </span>│<span class="r12">   28% </span>│<span class="r12">  10%  </span>│<span class="r1">        </span>│<span class="r1"> 2.24G </span>│<span class="r1">▃▆█▆▃▁▁▁▁  93% </span>│<span class="r13">       </span>│<span class="r15">    y </span><span class="r19">=</span><span class="r15"> np</span><span class="r19">.</span><span class="r15">array(np</span><span class="r19">.</span><span class="r15">random</span><span class="r19">.</span><span class="r15">uniform(</span><span class="r19">0</span><span class="r15">, </span><span class="r19">100</span><span class="r15">, size</span><span class="r19">=</span><span class="r15">(</span><span class="r19">10**8</span><span class="r15">))</span>  
+ <span class="r10">    7 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r17">                                                        </span>  
+ <span class="r10">    8 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r17">                                                        </span>  
+ <span class="r10">    9 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r15">main()</span><span class="r17">                                                  </span>  
+ <span class="r10">   10 </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r17">                                                        </span>  
+ <span class="r10">      </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│                                                          
+╶──────┼───────┼───────┼───────┼────────┼───────┼───────────────┼───────┼─────────────────────────────────────────────────────────╴
+ <span class="r10">      </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r12">       </span>│<span class="r1">        </span>│<span class="r1">       </span>│<span class="r1">               </span>│<span class="r13">       </span>│<span class="r21">function summary for example.py                         </span>  
+ <span class="r10">    4 </span>│<span class="r12">       </span>│<span class="r12">   31% </span>│<span class="r12">  14%  </span>│<span class="r1">        </span>│<span class="r1"> 1.20G </span>│<span class="r1">█████▁▁▁▁ 100% </span>│<span class="r13">       </span>│<span class="r15">main</span><span class="r17">                                                    </span>  
+       ╵       ╵       ╵       ╵        ╵       ╵               ╵       ╵                                                          
+Top average memory consumption, by line:
+<span class="r1">(1)     6:  2289 MB</span>                                                                                                                 
+<span class="r1">(2)     5:   162 MB</span>                                                                                                                 
+<span class="r1">(3)     1:     8 MB</span>                                                                                                                 
+generated by the <a class="r22" href="https://github.com/plasma-umass/scalene">scalene</a> profiler                                                                                                   
+</pre>
+    </code>
+</body>
+</html>

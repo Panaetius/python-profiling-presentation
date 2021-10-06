@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Presentation Title</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+
+		<link rel="stylesheet" type="text/css" href="plugin/asciinema/asciinema-player.css" />
+
+		<style type="text/css">
+		    section.title-slide {
+				position: absolute !important;
+				top: 50% !important;
+				margin:0 !important;
+			}
+		    html.print-pdf .reveal .slides .pdf-page section.title-slide {
+				position: absolute !important;
+				top: 50% !important;
+				left:30% !important;
+				margin:0 !important;
+			}
+			.title-slide h2, .title-slide h3 {
+				color: white;
+			}
+
+			section.content-slide {
+				margin: 0;
+			}
+
+			section.content-slide h3:first-child {
+				color: white;
+				margin-top: 20px;
+				margin-bottom: 50px;
+			}
+
+			.reveal .slides section[data-vertical-align-top]{
+				top: 0 !important;
+				left: 0 !important;
+			}
+
+			.reveal .slides, html.print-pdf .reveal .slides .pdf-page section {
+				text-align: left !important;
+				margin-left: 250px !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides slides-pdf">
+				<section data-markdown data-separator="---" data-separator-vertical="--" data-background-image="dist/images/title_background.svg" class="title-slide">
+					<textarea data-template>
+					  ## Profiling Python Code
+
+
+					  ### Improve performance for great good!
+					  <br/>
+					  <br/>
+
+					  <img style="position:absolute;top:-20%;left:57%;" src="dist/images/profiling.jpg" />
+					</textarea>
+				</section>
+				<section data-markdown data-separator="---" data-separator-vertical="--" data-background-image="dist/images/slide_background.svg" class="content-slide">
+					<textarea data-template>
+					  ### What is profiling?
+
+					  Measure execution time and resource usage of programs to identify bottlenecks
+
+					  Types of profiling:
+					  * Line based
+					  * Function based
+
+					  Resources:
+					  * CPU Time
+					  * RAM Use
+					  * GPU Time
+					  * (I/O time)
+
+					  <img style="position:absolute;top:70%;left:15%;width:1300px;" src="dist/images/profiler-comparison.png" />
+
+					  --
+
+					  ### Line vs Function based
+
+					  Function Based:
+
+					  <img src="dist/images/function_based.png" />
+
+					  Line Based:
+
+					  <img width="750px" src="dist/images/line_based.png" />
+
+					  ---
+
+					  ### Scalene - Simple Example
+
+					  <div class="asciicast">
+							<!--a
+							{
+							"URL": "ping.json"
+							}
+							-->
+						</div>
+
+
+					</textarea>
+				  </section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script src="bower_components/reveal.js-menu/menu.js"></script>
+		<script src="plugin/anything/plugin.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				progress: true,
+				slideNumber: "h.v",
+				center: false,
+				width: 1920,
+				height: 1080,
+				minScale: 0.2,
+				maxScale: 4.0,
+				margin: 0,
+				transition: "slide",
+				backgroundTransition: "slide",
+				menu: {
+					themes: true
+				},
+				anything: [
+                  {
+					  className: "asciicast",
+                      defaults: { theme: 'monokai', fontSize: '15px' },
+                      initialize: (function(container, options) {
+                       	asciinema.player.js.CreatePlayer(container, options.URL, options);
+                      })
+                   },
+				],
+				dependencies: [
+                  { src: 'plugin/asciinema/asciinema-player.js' },
+				],
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMenu, RevealAnything]
+			});
+		</script>
+	</body>
+</html>
