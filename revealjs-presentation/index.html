@@ -85,9 +85,11 @@
 					  * CPU Time
 					  * RAM Use
 					  * GPU Time
-					  * (I/O time)
+					  * GPU Memory
+					  * (I/O Time)
+					  * (Networking)
 
-					  <img style="position:absolute;top:70%;left:15%;width:1300px;" src="dist/images/profiler-comparison.png" />
+					  <img style="position:absolute;top:50%;left:17%;width:1300px;" src="dist/images/profiler-comparison.png" />
 
 					  --
 
@@ -134,12 +136,34 @@
 					</section>
 					<section>
 						<h3>Scalene - GPU Code Example</h3>
-						<p class="fragment fade-out" data-fragment-index="0">
-							<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example2.html" style="position:absolute;top:100%;left:0%;width:1400px;height:800px;max-height:none;" ></iframe>
-						</p>
-						<p class="fragment fade-in" data-fragment-index="0">
-							<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example2_better.html" style="position:absolute;top:100%;left:0%;width:1400px;height:800px;max-height:none;"></iframe>
-						</p>
+						<iframe frameborder="0" seamless='seamless' scrolling=no src="dist/html/example3.html" style="position:absolute;top:75%;left:0%;width:1600px !important;height:880px;max-height:none;max-width:none;" ></iframe>
+					</section>
+					<section>
+						<h3>Scalene meets the realworld</h3>
+						Sometimes it doesn't work that well...
+
+						<img style="position:absolute;top:20%;left:70%;width:46px;height:900px;max-height:none;" src="dist/images/scalene_renku.png"/>
+						<br/><br/><br/>
+						We could filter using <b>--profile-only</b>
+
+						<pre style="height:30px;width:1150px;margin:0px;"><code data-trim data-noescape class="shell">
+							$ scalene --profile-only renku/cli/__main__.py -- renku/cli/__init__.py --version
+						</code></pre>
+						<br/>
+						Or try showing the reduced profile with <b>--reduced-profile</b>
+
+						<pre style="height:30px;width:900px;margin:0px;"><code data-trim data-noescape class="shell">
+							$ scalene --reduced-profile -- renku/cli/__init__.py --version
+						</code></pre>
+						<br/>
+						Or use the decorator
+						<pre style="height:30px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+							from scalene import profile
+
+							@profile
+							def my_slow_function():
+							    [...]
+						</code></pre>
 					</section>
 				</section>
 				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
@@ -148,7 +172,7 @@
 
 						<b>$ python -m cProfile [-m module | file]</b><br/><br/>
 						<pre style="height:600px;width:1500px;margin:0px;"><code data-trim data-noescape><script type="text/template">
-							$ python -m cProfile -s cumulative -m renku.cli --version | more
+							$ python -m cProfile -s cumulative -m renku.cli --version
 							0.16.1
 									6786351 function calls (6157157 primitive calls) in 2.753 seconds
 
@@ -167,22 +191,23 @@
 							1228/2    0.002    0.000    2.747    1.374 <frozen importlib._bootstrap_external>:722(exec_module)
 							1552/2    0.001    0.000    2.747    1.373 <frozen importlib._bootstrap>:211(_call_with_frames_removed)
 									1    0.000    0.000    2.288    2.288 client.py:18(<module>)
+							[...]
 							</script></code></pre>
 					</section>
 					<section>
 						<h3>Actually working with cProfile</h3>
-						<b>$ python -m cProfile -o outfile [-m module | file]</b><br/>
-						<b>$ snakeviz outfile</b><br/><br/>
-						<p class="fragment fade-out" data-fragment-index="0">
-							<img width="1000px" src="dist/images/snakeviz1.png" />
-						</p>
-						<p class="fragment fade-in" data-fragment-index="0">
-							<img style="position:absolute;top:32.3%;left:0%;width:1000px;" src="dist/images/snakeviz2.png" />
-						</p>
+						<pre style="height:50px;width:1150px;margin:0px;"><code data-trim data-noescape class="shell">
+						$ python -m cProfile -o outfile [-m module | file]
+						$ snakeviz outfile
+						</code></pre><br/>
+						<div class="r-stack">
+							<img class="fragment" style="margin:0;width:1000px;" src="dist/images/snakeviz1.png" />
+							<img class="fragment" style="margin:0;width:1000px;" src="dist/images/snakeviz2.png" />
+						</div>
 					</section>
 					<section>
 						<h3>Too Many Imports!</h3>
-						<b>$ python -X importttimemyscript.py</b><br/><br/>
+						<b>$ python -X importtime myscript.py</b><br/><br/>
 
 						<pre style="height:600px;width:1500px;margin:0px;"><code data-trim data-noescape><script type="text/template">
 							import time: self [us] | cumulative | imported package
@@ -205,6 +230,10 @@
 							import time:       536 |       1010 |   renku.core.commands.version
 							import time:       731 |     347862 | renku.cli
 						</script></code></pre>
+					</section>
+					<section>
+						<h3>The problem</h3>
+						<img src="dist/images/renku_cli.png" width="800px"/>
 					</section>
 				</section>
 				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
@@ -238,11 +267,55 @@
 						</code></pre>
 						<img src="dist/images/pyspy.png" />
 					</section>
+					<section>
+						<h3>PyTorch Profiler</h3>
+						<pre style="height:300px;width:1100px;margin:0px;"><code data-trim data-noescape class="Python">
+							import torch
+							import torchvision.models as models
+							from torch.profiler import profile, record_function, ProfilerActivity
+
+							model = models.resnet18()
+							inputs = torch.randn(5, 3, 224, 224)
+
+							with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+								profile_memory=True, record_shapes=True
+							) as prof:
+								with record_function("model_inference"):
+									model(inputs)
+							print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
+						</code></pre>
+						<br/><br/>
+						<pre style="height:420px;width:1100px;margin:0px;"><code data-trim data-noescape>
+							# ---------------------------------  ------------  ------------  ------------
+							#                              Name       CPU Mem  Self CPU Mem    # of Calls
+							# ---------------------------------  ------------  ------------  ------------
+							#                       aten::empty      94.79 Mb      94.79 Mb           121
+							#     aten::max_pool2d_with_indices      11.48 Mb      11.48 Mb             1
+							#                       aten::addmm      19.53 Kb      19.53 Kb             1
+							#               aten::empty_strided         572 b         572 b            25
+							#                     aten::resize_         240 b         240 b             6
+							#                         aten::abs         480 b         240 b             4
+							#                         aten::add         160 b         160 b            20
+							#               aten::masked_select         120 b         112 b             1
+							#                          aten::ne         122 b          53 b             6
+							#                          aten::eq          60 b          30 b             2
+							# ---------------------------------  ------------  ------------  ------------
+							# Self CPU time total: 53.064ms
+						</code></pre>
+					</section>
+					<section>
+						<h3>Honorary Mentions - Browser Debug Console (F12)</h3>
+						Shown by pressing F12 in your browser. <br/>Also helpful for debugging other problems.
+						<div class="r-stack">
+							<img class="fragment" style="margin:0;width:1000px;" src="dist/images/firefox1.png" />
+							<img class="fragment" style="margin:0;width:1000px;" src="dist/images/firefox2.png" />
+						</div>
+					</section>
 				</section>
 				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
 					<section>
-						<br/><br/><br/><br/>
-						<h2 class="r-fit-text" style="width:1500px;">What can we do about it?</h2>
+						<br/><br/><br/><br/><br/><br/><br/><br/>
+						<h2 style="width:1000px;">What can we do about it?</h2>
 					</section>
 					<section>
 						<h3>Memoization</h3>
@@ -260,7 +333,7 @@
 					</section>
 
 					<section>
-						<h3>Memoization</h3>
+						<h3>Memoization 2</h3>
 						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
 							from functools import lru_cache
 
@@ -299,13 +372,29 @@
 					<section>
 						<h3>Learn itertools</h3>
 						<p>
-							<b>itertools</b> module has many built-in function for common tasks that are fast
+							<b>itertools</b> module has many built-in functions for common tasks that are fast
 						</p>
 						<ul>
 							<li><b>chain</b> Concatenate lists/iterators without having to actually concatenate them</li>
 							<li><b>product</b> Get the cartesian product of two or more lists/iterators</li>
 							<li><b>permutations</b> Get all possible orderings of a list of elements</li>
 						</ul>
+					</section>
+					<section>
+						<h3>Python multiprocessing</h3>
+						Try the <b>multiprocessing</b> library.<br/>
+						Not <b>threading</b>! (GIL)
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+							from multiprocessing import Process
+
+							def f(name):
+								print('hello', name)
+
+							if __name__ == '__main__':
+								p = Process(target=f, args=('bob',))
+								p.start()
+								p.join()
+						</code></pre>
 					</section>
 					<section>
 						<h3>Try PyPy</h3>
@@ -316,10 +405,26 @@
 							<li>Might use less memory</li>
 							<li>Should work with most Python code</li>
 						</ul>
+						<br/>
+						<br/>
+						This turns python-code into optimized byte-code that can be run directly:
+						<br/>
+						<br/>
+						<pre style="height:300px;width:900px;margin:0px;"><code data-trim data-noescape class="python">
+							>>> import dis
+							>>> def f(x):
+							...     return x + 1
+							>>> dis.dis(f)
+							2         0 LOAD_FAST                0 (x)
+									  3 LOAD_CONST               1 (1)
+									  6 BINARY_ADD
+									  7 RETURN_VALUE
+						</code></pre>
 					</section>
 					<section>
 						<h3>Try C!</h3>
-						It's not that difficult to extend python with C code<br/><br/>
+						Maybe numpy or another C Python library does what you want.<br/>
+						It's not that difficult to extend Python with C code<br/><br/>
 
 						<pre style="height:500px;width:1000px;margin:0px;"><code data-trim data-noescape class="c"><script type="text/template">
 							#include <Python.h>
@@ -347,12 +452,16 @@
 						<ul>
 							<li>Keep metrics from before and after a change</li>
 							<li>Make sure you actually improved something</li>
+							<li>Focus on big gains</li>
+							<li>Don't overoptimize. Is saving 0.01s worth losing readability?</li>
 						</ul>
+						<br/>
+						<img src="dist/images/the_general_problem.png"/>
 					</section>
 				</section>
 				<section data-background-image="dist/images/slide_background.svg" class="content-slide">
 					<h3>Questions?</h3>
-					<img src="dist/images/questions.webp"/>
+					<img src="dist/images/speedy.png"/>
 				</section>
 			</div>
 		</div>
